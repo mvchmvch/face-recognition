@@ -9,12 +9,6 @@ import FaceRecognition from './components/facerecognition/FaceRecognition'
 import SignIn from './components/signin/SignIn'
 import Register from './components/register/Register'
 
-import Clarifai from 'clarifai'
-
-const clarifaiApp = new Clarifai.App({
- apiKey: '454dfe2690d64122815a1ad8a6ed3267'
-});
-
 
 const particleOptions = {
   particles: {
@@ -83,8 +77,13 @@ onInputChange = (event) => {
 onButtonSubmit  = () => {
  this.setState({imageUrl: this.state.input})
  
- clarifaiApp.models.predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
- .then( response => {
+fetch('http://localhost:3000/imageurl', {
+       method: 'post',
+       headers: {'Content-Type' : 'application/json'},
+       body: JSON.stringify({ input: this.state.input })
+ })
+.then(response => response.json())
+.then( response => {
     if(response) {
       fetch('http://localhost:3000/image', {
           method: 'put',
@@ -93,6 +92,7 @@ onButtonSubmit  = () => {
       })
       .then(response => response.json())
       .then(count => this.setState (Object.assign(this.state.user, {entries: count })))
+      .catch(err => {console.log(err)})
     }
   this.displayFaceBox(this.calculateFaceLocation(response))
   })
