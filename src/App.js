@@ -77,7 +77,7 @@ onInputChange = (event) => {
 onButtonSubmit  = () => {
  this.setState({imageUrl: this.state.input})
  
-fetch('http://localhost:3000/imageurl', {
+fetch('https://desolate-mesa-25918.herokuapp.com/imageurl', {
        method: 'post',
        headers: {'Content-Type' : 'application/json'},
        body: JSON.stringify({ input: this.state.input })
@@ -85,7 +85,7 @@ fetch('http://localhost:3000/imageurl', {
 .then(response => response.json())
 .then( response => {
     if(response) {
-      fetch('http://localhost:3000/image', {
+      fetch('https://desolate-mesa-25918.herokuapp.com/image', {
           method: 'put',
           headers: {'Content-Type' : 'application/json'},
           body: JSON.stringify({ id: this.state.user.id })
